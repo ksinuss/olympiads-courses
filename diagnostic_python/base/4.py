@@ -44,7 +44,7 @@ class House:
                 return len(self.place) >= len(other.place)
         else:
             return self.size >= other.size
-    def __lt__(self, other): #<
+    def __lt__(self, other): # <
         if self.size == other.size:
             if len(self.place) == len(other.place):
                 if self.name == other.name:
