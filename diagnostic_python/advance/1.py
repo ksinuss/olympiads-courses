@@ -1,4 +1,5 @@
 def alphabet_reverse(string):
+    
     def choose_max(s, smax):
         if len(s) > len(smax):
             smax = s
@@ -7,6 +8,7 @@ def alphabet_reverse(string):
                 smax = s
         s = ''
         return s, smax
+    
     smax = s = ''
     for i in range(len(string)-1):
         word1 = string[i]
@@ -22,6 +24,7 @@ def alphabet_reverse(string):
             s += word1
             s, smax = choose_max(s, smax)
     return smax
+
 strings = [
     'JLKEDXJONHCJQLSP', 
     'IRJMQHSFPBEHPKI',
@@ -29,5 +32,6 @@ strings = [
     'COXDEAWPFIICB',
     'TLXSDAQMJRNR'
 ]
+
 for string in strings:
     print(alphabet_reverse(string))

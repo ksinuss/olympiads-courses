@@ -15,44 +15,51 @@ def get_csv_file(output: list):
         writer.writeheader()
         writer.writerows(output)
 
-def form_output(elements: dict, filler: dict):
-    output_ = output
-    for heading in elements:
-        output_[heading] = elements[heading]
-        print(output_)
-        if all(output[heading] for heading in output_):
-            OUTPUT.append(output_)
-        return output
+def form_output(filler: dict):
+    print(filler)
+    # output_ = output
+    # for heading in elements:
+    #     output_[heading] = elements[heading]
+    #     print(output_)
+    #     if all(output[heading] for heading in output_):
+    #         OUTPUT.append(output_)
+    #     return output
 
-def choosing_next_step(name_table, correct_id: list):
-    print(name_table, correct_id)
-    value = []
+def choosing_next_step(name_table, correct_id: list, step_number):
+    # print(name_table, correct_id)
+    next_step = steps[NAME_TABLE][step_number]
+    value = map(str, MARKS[next_step['value']])
+    filler = []
     if name_table == 'engines':
         for id in correct_id:
-            value.append(id[0])
-            filler = {'engine': id[1]}
-            output_ = form_output()
-            take_correct_id('ships', 'engine_id', '=', engine_id, output_)
+            engine_id = id[0]
+            MARKS['engine_id'].add(engine_id)
+            filler.append((engine_id, {'engine': id[1]}))
     if name_table == 'ships':
         for id in correct_id:
-            value.append(id[0])
-            ship_id = id[0]
-            ship = id[1]
-            output_ = form_output({'ship': ship})
-            ['expeditions', 'ship_id', '=', ship_id, output_]
+            MARKS['ship_id'].add(id[0])
+            MARKS['engine_id'].add(id[2])
+            filler.append(({'ship': id[1]}))
     if name_table == 'expeditions':
         for id in correct_id:
-                form_output(
-                    {
-                        'expedition_id': id[0],
-                        'designation': id[1],
-                        'target': id[2],
-                        'year': id[3]
-                    }
-                )
-    take_correct_id(name_table, name_column, '=', value)
+            ship_id = id[4]
+            MARKS['ship_id'].add(ship_id)
+            filler.append((
+                ship_id,
+                {
+                    'expedition_id': id[0],
+                    'designation': id[1],
+                    'target': id[2],
+                    'year': id[3]
+                }
+            ))
+    form_output(filler)
+    name_table = next_step['name_table']
+    name_column = next_step['name_column']
+    # print(name_table, name_column, value)
+    take_correct_id(name_table, name_column, '=', value, step_number+1)
 
-def take_correct_id(name_table, name_column, sign, value: list):
+def take_correct_id(name_table, name_column, sign, value: list, step_number=0):
     try:
         with sqlite3.connect(NAME_FILE) as conn:
             cursor = conn.cursor()
@@ -72,8 +79,8 @@ def take_correct_id(name_table, name_column, sign, value: list):
                 '''
             cursor.execute(request)
             correct_id = cursor.fetchall() # fetchone - ТОЛЬКО 1 запись, fetchall - ВСЕ записи
-            print(correct_id)
-            choosing_next_step(name_table, correct_id)
+            # print(correct_id)
+            choosing_next_step(name_table, correct_id, step_number)
             # return correct_id
     except Exception as e:
         print(e)
@@ -91,35 +98,45 @@ steps = {
     'expeditions': [
         {
             'name_table': 'ships',
-            'name_column': 'id'
+            'name_column': 'id',
+            'value': 'ship_id'
         },
         {
             'name_table': 'engines',
-            'name_column': 'id'
+            'name_column': 'id',
+            'value': 'engine_id'
         }
     ],
     'ships': [
         {
             'name_table': 'engines',
-            'name_column': 'id'
+            'name_column': 'id',
+            'value': 'engine_id'
         },
         {
             'name_table': 'expeditions',
-            'name_column': 'ship_id'
+            'name_column': 'ship_id',
+            'value': 'ship_id'
         }
     ],
     'engines': [
         {
             'name_table': 'ships',
-            'name_column': 'engine_id'
+            'name_column': 'engine_id',
+            'value': 'engine_id'
         },
         {
             'name_table': 'expeditions',
-            'name_column': 'ship_id'
+            'name_column': 'ship_id',
+            'value': 'ship_id'
         }
     ]
 }
 
+MARKS = {
+    'ship_id': set(),
+    'engine_id': set()
+}
 OUTPUT = []
 
 take_correct_id(NAME_TABLE, name_column, '<', [max_value])

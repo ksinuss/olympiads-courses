@@ -3,6 +3,7 @@ def harvesting(data):
     words = [i.split()[-1] for i in strings]
     words = set(words)
     print(*sorted(words), sep='\n')
+
 data1 = '''we have collected a lot of ripe melons
 this year a large harvest of wheat
 has been born a lot of potatoes
@@ -13,6 +14,7 @@ a bag of onions
 3 baskets of cabbage
 5 cans tomato
 bed of carrots'''
+
 harvesting(data1)
 print()
 harvesting(data2)

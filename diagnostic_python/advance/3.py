@@ -22,7 +22,7 @@ def create_datetime_minutes(date_time):
 def danger_object(host, port, date_time_starship, speed):
     # data = requests.get(f'https://{host}:{port}')
     data = data_
-    omin = {
+    minimum_values = {
         'object': '',
         'difference': float('inf')
     }
@@ -35,10 +35,10 @@ def danger_object(host, port, date_time_starship, speed):
         dts = (dt_arrival, dt)
         difference = max(dts) - min(dts)
         difference = int(difference)
-        if difference < omin["difference"]:
-            omin["object"] = object['object']
-            omin["difference"] = difference
-    print(omin["object"], omin["difference"])
+        if difference < minimum_values["difference"]:
+            minimum_values["object"] = object['object']
+            minimum_values["difference"] = difference
+    print(minimum_values["object"], minimum_values["difference"])
 
 # date_time = input()
 # speed = input()
@@ -47,4 +47,9 @@ speed = '120'
 
 with open('danger.json', mode='r') as file:
     f = json.load(file)
-    danger_object(host=f['host'], port=f['port'], date_time_starship=date_time_starship, speed=int(speed))
+    danger_object(
+        host = f['host'], 
+        port = f['port'], 
+        date_time_starship = date_time_starship, 
+        speed = int(speed)
+    )

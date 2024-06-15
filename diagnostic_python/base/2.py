@@ -8,6 +8,7 @@ def sleepover(*data):
     for counts in a:
         a[counts].sort(reverse=True)
     return a
+
 data1 = [
     'Hydrus', 'Pavo', 'Corvus', 'Gemini',
     'Andromeda', 'Antlia', 'Microscopium',
@@ -18,5 +19,6 @@ data2 = [
     'Lacerta', 'Indus',
     'Triangulum', 'Cepheus'
 ]
+
 print(sleepover(*data1))
 print(sleepover(*data2))

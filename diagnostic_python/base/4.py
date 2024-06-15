@@ -1,4 +1,5 @@
 import copy
+
 class House:
     def __init__(self, name, place, size=100):
         self.name = name
@@ -66,18 +67,23 @@ class House:
                 return len(self.place) <= len(other.place)
         else:
             return self.size <= other.size
+
 hs = House('Marran', 'Salt Beach')
 print(hs, hs(), sep='\n')
+
 id_hs = id(hs)
 hs += -20
 hs.change_owner('Rual')
 print(hs)
 print(id_hs == id(hs))
+
 print()
+
 hs = House('Lart', 'Mount', 57)
 hs1 = House('Sam', 'Fast River')
 print(hs, hs1, sep='\n')
 print(hs > hs1, hs <= hs1, hs == hs1)
+
 hs2 = hs // hs1
 print(hs2)
 print(hs2 < hs1, hs2 >= hs, hs2 != hs1)
