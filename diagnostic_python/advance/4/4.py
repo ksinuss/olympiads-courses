@@ -77,7 +77,7 @@ def take_correct_id(name_table, name_column, sign, value: list, step_number=0):
             cursor.execute(request)
             correct_id = cursor.fetchall() # fetchone - ТОЛЬКО 1 запись, fetchall - ВСЕ записи
             choosing_next_step(name_table, correct_id, step_number)
-    except Exception as e:
+    except Exception:
         return None
 
 # INPUT
